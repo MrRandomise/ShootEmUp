@@ -1,0 +1,7 @@
+*.exe
+*.dll
+Logs/
+Library/
+UserSettings/
+Library/
+Temp/

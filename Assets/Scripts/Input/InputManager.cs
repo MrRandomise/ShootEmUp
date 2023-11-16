@@ -18,7 +18,6 @@ namespace ShootEmUp
             {
                 characterController._fireRequired = true;
             }
-
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 this.HorizontalDirection = -1;

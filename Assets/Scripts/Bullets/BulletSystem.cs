@@ -55,8 +55,8 @@ namespace ShootEmUp
             bullet.SetPosition(args.position);
             bullet.SetColor(args.color);
             bullet.SetPhysicsLayer(args.physicsLayer);
-            bullet.Damage = args.damage;
-            bullet.IsPlayer = args.isPlayer;
+            bullet.damage = args.damage;
+            bullet.isPlayer = args.isPlayer;
             bullet.SetVelocity(args.velocity);
             
             if (this.m_activeBullets.Add(bullet))

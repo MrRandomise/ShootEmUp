@@ -1,5 +1,7 @@
 *.exe
 *.dll
+*.csproj
+*.sln
 Logs/
 Library/
 UserSettings/

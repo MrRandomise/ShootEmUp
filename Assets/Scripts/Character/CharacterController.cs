@@ -2,48 +2,19 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class CharacterController : MonoBehaviour
+    public class CharacterController : MonoBehaviour
     {
-        [SerializeField] private GameObject character; 
-        [SerializeField] private GameManager gameManager;
-        [SerializeField] private BulletSystem _bulletSystem;
-        [SerializeField] private BulletConfig _bulletConfig;
+        [SerializeField] public InputKeypboard inputManager;
+        [SerializeField] public GameObject character;
+        [HideInInspector] public MoveComponent moveComponent;
+        [HideInInspector] public WeaponComponent weaponComponent;
+        [HideInInspector] public HitPointsComponent hitPointsComponent;
         
-        public bool _fireRequired;
-
-        private void OnEnable()
+        private void Start()
         {
-            this.character.GetComponent<HitPointsComponent>().hpEmpty += this.OnCharacterDeath;
-        }
-
-        private void OnDisable()
-        {
-            this.character.GetComponent<HitPointsComponent>().hpEmpty -= this.OnCharacterDeath;
-        }
-
-        private void OnCharacterDeath(GameObject _) => this.gameManager.FinishGame();
-
-        private void FixedUpdate()
-        {
-            if (this._fireRequired)
-            {
-                this.OnFlyBullet();
-                this._fireRequired = false;
-            }
-        }
-
-        private void OnFlyBullet()
-        {
-            var weapon = this.character.GetComponent<WeaponComponent>();
-            _bulletSystem.FlyBulletByArgs(new BulletSystem.Args
-            {
-                isPlayer = true,
-                physicsLayer = (int) this._bulletConfig.PhysicsLayer,
-                color = this._bulletConfig.Color,
-                damage = this._bulletConfig.Damage,
-                position = weapon.Position,
-                velocity = weapon.Rotation * Vector3.up * this._bulletConfig.Speed
-            });
+            moveComponent = character.GetComponent<MoveComponent>();
+            weaponComponent = character.GetComponent<WeaponComponent>();
+            hitPointsComponent = character.GetComponent<HitPointsComponent>();
         }
     }
 }

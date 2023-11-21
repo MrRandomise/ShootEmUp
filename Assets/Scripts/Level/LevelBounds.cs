@@ -24,6 +24,6 @@ namespace ShootEmUp
                    && positionX < this.rightBorder.position.x
                    && positionY > this.downBorder.position.y
                    && positionY < this.topBorder.position.y;
-        }
+        } 
     }
 }

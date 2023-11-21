@@ -9,7 +9,7 @@ namespace ShootEmUp
         public void Atack()
         {
             var weapon = GetComponent<WeaponComponent>();
-            bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+            bulletSystem.InitialBullet(new BulletSystem.Args
             {
                 isPlayer = true,
                 physicsLayer = (int) this.bulletConfig.physicsLayer,

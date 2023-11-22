@@ -4,19 +4,22 @@ namespace ShootEmUp
 {
     public sealed class CharacterDestroyController: MonoBehaviour
     {
-        [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterController characterController;
+        [SerializeField] private GameManager gameManager;
 
         private void OnEnable()
         {
-            characterController.hitPointsComponent.hpEmpty += this.OnCharacterDeath;
+            characterController.hitPointsComponent.HpIsEmpty += OnHpIsEmpty;
         }
 
         private void OnDisable()
         {
-            characterController.hitPointsComponent.hpEmpty -= this.OnCharacterDeath;
+            characterController.hitPointsComponent.HpIsEmpty -= OnHpIsEmpty;
         }
-        
-        private void OnCharacterDeath(GameObject _) => gameManager.FinishGame();
+
+        private void OnHpIsEmpty(GameObject character)
+        {
+            gameManager.FinishGame();
+        }
     }
 }

@@ -264,6 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 228048502}
+  bulletConfig: {fileID: 11400000, guid: 957b74e4119413941b5dbe7435570f34, type: 2}
 --- !u!114 &228048501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,8 +277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ccab2fd0ed4e9143ba1a8c7e8f971ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 228048502}
   levelBounds: {fileID: 2572952653776768186}
+  characterController: {fileID: 228048502}
 --- !u!114 &228048502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,11 +291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ffbcfdf28dd75e49b6c3b7bc9ebe7c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputManager: {fileID: 1134805361}
+  inputControl: {fileID: 1134805361}
   character: {fileID: 4414282821800802397}
-  moveComponent: {fileID: 0}
-  weaponComponent: {fileID: 0}
-  hitPointsComponent: {fileID: 0}
 --- !u!114 &228048503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,8 +305,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 165fe38559946cd439f84d46a147ec3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 3951702117947426123}
   characterController: {fileID: 228048502}
+  gameManager: {fileID: 3951702117947426123}
 --- !u!1 &363245575
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,6 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37bd15923a144ffbab0333dc6e74e641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletPool: {fileID: 363245578}
 --- !u!114 &363245578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1258,6 +1257,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
+    - target: {fileID: 3926786964091724598, guid: 9699e7e809fd44b2bbf3d30c951ecbd2,
+        type: 3}
+      propertyPath: bulletSystem
+      value: 
+      objectReference: {fileID: 363245577}
     m_RemovedComponents:
     - {fileID: 3926786964091724597, guid: 9699e7e809fd44b2bbf3d30c951ecbd2, type: 3}
     - {fileID: -3678795999885839352, guid: 9699e7e809fd44b2bbf3d30c951ecbd2, type: 3}
@@ -1374,20 +1378,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3926786964592264468}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4414282821800802407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4414282821800802397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 734d99bdb3d0e39418e028e5a061c256, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletSystem: {fileID: 363245577}
-  bulletConfig: {fileID: 11400000, guid: 7138ae5d32d814e0ca50c616c65ea105, type: 2}
 --- !u!1 &4788406047096451828
 GameObject:
   m_ObjectHideFlags: 0

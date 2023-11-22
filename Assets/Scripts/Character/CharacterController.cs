@@ -1,16 +1,17 @@
+using System;
 using UnityEngine;
 
 namespace ShootEmUp
 {
     public class CharacterController : MonoBehaviour
     {
-        [SerializeField] public InputKeypboard inputManager;
+        [SerializeField] public ControlInput inputControl;
         [SerializeField] public GameObject character;
-        [HideInInspector] public MoveComponent moveComponent;
-        [HideInInspector] public WeaponComponent weaponComponent;
-        [HideInInspector] public HitPointsComponent hitPointsComponent;
+        [NonSerialized] public MoveComponent moveComponent;
+        [NonSerialized] public WeaponComponent weaponComponent;
+        [NonSerialized] public HitPointsComponent hitPointsComponent;
         
-        private void Start()
+        private void Awake()
         {
             moveComponent = character.GetComponent<MoveComponent>();
             weaponComponent = character.GetComponent<WeaponComponent>();

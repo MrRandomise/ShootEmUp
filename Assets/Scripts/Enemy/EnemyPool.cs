@@ -5,22 +5,18 @@ namespace ShootEmUp
 {
     public sealed class EnemyPool : MonoBehaviour
     {
-        [Header("Spawn")]
-        [SerializeField]
+        [Header("Spawn")][SerializeField]
         private EnemyPositions enemyPositions;
 
-        [SerializeField]
-        private GameObject character;
+        [SerializeField] private GameObject character;
 
         [SerializeField]
         private Transform worldTransform;
 
-        [Header("Pool")]
-        [SerializeField]
+        [Header("Pool")][SerializeField]
         private Transform container;
 
-        [SerializeField]
-        private GameObject prefab;
+        [SerializeField] private GameObject prefab;
 
         private readonly Queue<GameObject> enemyPool = new();
         

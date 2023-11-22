@@ -6,27 +6,26 @@ namespace ShootEmUp
 {
     public sealed class EnemyManager : MonoBehaviour
     {
-        [SerializeField]
-        private EnemyPool enemyPool;
+        [SerializeField] private EnemyPool enemyPool;
 
-        [SerializeField]
-        private BulletSystem bulletSystem;
-        
+        [SerializeField] private BulletSystem bulletSystem;
+        [SerializeField] private int spawnTime = 1;
         private readonly HashSet<GameObject> m_activeEnemies = new();
-
-        private IEnumerator Start()
+        
+        private void Start()
         {
-            while (true)
-            {
-                yield return new WaitForSeconds(1);
+            StartCoroutine(EnemyCreated());
+        }
+
+        private IEnumerator EnemyCreated() {
+            while (true) {
+                yield return new WaitForSeconds(spawnTime);
                 var enemy = this.enemyPool.SpawnEnemy();
-                if (enemy != null)
-                {
-                    if (this.m_activeEnemies.Add(enemy))
-                    {
-                        enemy.GetComponent<HitPointsComponent>().hpEmpty += this.OnDestroyed;
-                        enemy.GetComponent<EnemyAttackAgent>().OnFire += this.OnFire;
-                    }    
+                if (enemy != null) {
+                    if (m_activeEnemies.Add(enemy)) {
+                        enemy.GetComponent<HitPointsComponent>().HpIsEmpty += OnDestroyed;
+                        enemy.GetComponent<EnemyAttackAgent>().OnFire += OnFire;
+                    }
                 }
             }
         }
@@ -35,7 +34,7 @@ namespace ShootEmUp
         {
             if (m_activeEnemies.Remove(enemy))
             {
-                enemy.GetComponent<HitPointsComponent>().hpEmpty -= this.OnDestroyed;
+                enemy.GetComponent<HitPointsComponent>().HpIsEmpty -= this.OnDestroyed;
                 enemy.GetComponent<EnemyAttackAgent>().OnFire -= this.OnFire;
 
                 enemyPool.UnspawnEnemy(enemy);
@@ -44,7 +43,7 @@ namespace ShootEmUp
 
         private void OnFire(GameObject enemy, Vector2 position, Vector2 direction)
         {
-            bulletSystem.InitialBullet(new BulletSystem.Args
+            bulletSystem.OnBulletCollision(new Args
             {
                 isPlayer = false,
                 physicsLayer = (int) PhysicsLayer.ENEMY_BULLET,

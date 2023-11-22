@@ -40,12 +40,12 @@ namespace ShootEmUp
             this.currentTime -= Time.fixedDeltaTime;
             if (this.currentTime <= 0)
             {
-                this.Fire();
+                this.OnAtack();
                 this.currentTime += this.countdown;
             }
         }
 
-        private void Fire()
+        private void OnAtack()
         {
             var startPosition = this.weaponComponent.Position;
             var vector = (Vector2) this.target.transform.position - startPosition;

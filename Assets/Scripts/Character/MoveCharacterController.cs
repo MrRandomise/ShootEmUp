@@ -10,12 +10,12 @@ namespace ShootEmUp
 
         private void OnEnable()
         {
-            characterController.inputManager.OnMoveAction += OnMove;
+            characterController.inputControl.OnMoveAction += OnMove;
         }
 
         private void OnDisable()
         {
-            characterController.inputManager.OnMoveAction -= OnMove;
+            characterController.inputControl.OnMoveAction -= OnMove;
         }
 
         private void OnMove(int dir)

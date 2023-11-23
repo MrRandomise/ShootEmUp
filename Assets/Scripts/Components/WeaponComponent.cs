@@ -5,8 +5,8 @@ namespace ShootEmUp
     public sealed class WeaponComponent : MonoBehaviour
     {
         [SerializeField] private Transform firePoint;
-        [SerializeField] private BulletSystem bulletSystem;
-
+        private BulletSystem bulletSystem;
+        public int test = 5;
         private void Awake()
         {
             bulletSystem = FindObjectOfType<BulletSystem>();
@@ -14,12 +14,12 @@ namespace ShootEmUp
 
         public Vector2 Position
         {
-            get { return this.firePoint.position; }
+            get { return firePoint.position; }
         }
 
         public Quaternion Rotation
         {
-            get { return this.firePoint.rotation; }
+            get { return firePoint.rotation; }
         }
 
         public void OnWeaponAtack(Args bulletArgs)

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class BulletSystem : MonoBehaviour
+    public sealed class BulletSystem : MonoBehaviour, IListenerFixUpdate
     {
         [SerializeField] private BulletPool bulletPool;
         [SerializeField] private LevelBounds levelBounds;
@@ -30,7 +30,7 @@ namespace ShootEmUp
             }
         }
 
-        private void FixedUpdate()
+        public void OnFixUpdate()
         {
             bulletPool.m_cache.Clear();
             bulletPool.m_cache.AddRange(bulletPool.m_activeBullets);

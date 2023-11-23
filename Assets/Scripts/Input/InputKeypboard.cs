@@ -3,9 +3,9 @@ using System;
 
 namespace ShootEmUp
 {
-    public class InputKeypboard : ControlInput
+    public class InputKeypboard : ControlInput, IListenerUpdate
     {        
-        private void Update()
+        public void OnUpdate()
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {

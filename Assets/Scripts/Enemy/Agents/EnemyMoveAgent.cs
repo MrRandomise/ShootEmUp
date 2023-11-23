@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyMoveAgent : MonoBehaviour
+    public sealed class EnemyMoveAgent : MonoBehaviour, IListenerFixUpdate
     {
         public bool IsReached
         {
@@ -21,7 +21,7 @@ namespace ShootEmUp
             isReached = false;
         }
 
-        private void FixedUpdate()
+        public void OnFixUpdate()
         {
             if (isReached)
             {

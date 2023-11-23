@@ -1,17 +1,17 @@
 using UnityEngine;
 namespace ShootEmUp
 {
-public class FireCharacterControl : MonoBehaviour
+public class FireCharacterControl : MonoBehaviour, IListenerEnable, IListenerDisabled
 {
         [SerializeField] private CharacterController characterController;
         [SerializeField] private BulletConfig bulletConfig;
 
-        private void OnEnable()
+        public void OnListenerEnable()
         {
             characterController.inputControl.OnFireAction += OnAtack;
         }
 
-        private void OnDisable()
+        public void OnListenerDisabled()
         {
             characterController.inputControl. OnFireAction -= OnAtack;
         }

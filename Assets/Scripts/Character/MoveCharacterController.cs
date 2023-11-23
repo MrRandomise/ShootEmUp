@@ -2,18 +2,18 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class MoveCharacterController : MonoBehaviour
+    public class MoveCharacterController : MonoBehaviour, IListenerEnable, IListenerDisabled, IListenerFixUpdate
     {
         [SerializeField] private LevelBounds levelBounds;
         [SerializeField] private CharacterController characterController;
         private Vector2 direction;
 
-        private void OnEnable()
+        public void OnListenerEnable()
         {
             characterController.inputControl.OnMoveAction += OnMove;
         }
 
-        private void OnDisable()
+        public void OnListenerDisabled()
         {
             characterController.inputControl.OnMoveAction -= OnMove;
         }
@@ -28,8 +28,9 @@ namespace ShootEmUp
                 direction =  new Vector2(0f, 0f);
         }
 
-        private void FixedUpdate() {
+        public void OnFixUpdate() {
             characterController.moveComponent.MoveByRigidbodyVelocity(direction);
         }
+
     }
 }

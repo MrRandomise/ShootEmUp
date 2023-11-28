@@ -6,8 +6,10 @@ namespace ShootEmUp
     {
         public bool IsReached
         {
-            get { return this.isReached; }
+            get { return isReached; }
         }
+
+        [SerializeField] private float magnitude = 0.25f;
 
         [SerializeField] private MoveComponent moveComponent;
 
@@ -29,7 +31,7 @@ namespace ShootEmUp
             }
             
             var vector = destination - (Vector2) transform.position;
-            if (vector.magnitude <= 0.25f)
+            if (vector.magnitude <= magnitude)
             {
                 isReached = true;
                 return;

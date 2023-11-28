@@ -1,17 +1,14 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class InputKeypboard : ControlInput
-    {        
+    public sealed class InputMoveControl : MonoBehaviour
+    {
+        public event Action<int> OnMoveAction;
+
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                OnFireInput();
-            }
-
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 OnMoveInput(-1);
@@ -24,6 +21,11 @@ namespace ShootEmUp
             {
                 OnMoveInput(0);
             }
+        }
+
+        private void OnMoveInput(int dir)
+        {
+            OnMoveAction?.Invoke(dir);
         }
     }
 }

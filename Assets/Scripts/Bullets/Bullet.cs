@@ -10,7 +10,8 @@ namespace ShootEmUp
         [NonSerialized] public bool IsPlayer;
         
         [NonSerialized] public int Damage;
-        [SerializeField] private new Rigidbody2D rigidbody2D;
+
+        [SerializeField] private Rigidbody2D bulletBody;
 
         [SerializeField] private SpriteRenderer spriteRenderer;
 
@@ -19,22 +20,22 @@ namespace ShootEmUp
             OnCollisionEntered?.Invoke(this, collision);
         }
 
-        public void SetVelocity(Vector2 velocity)
+        private void SetVelocity(Vector2 velocity)
         {
-            rigidbody2D.velocity = velocity;
+            bulletBody.velocity = velocity;
         }
 
-        public void SetPhysicsLayer(int physicsLayer)
+        private void SetPhysicsLayer(int physicsLayer)
         {
             gameObject.layer = physicsLayer;
         }
 
-        public void SetPosition(Vector3 position)
+        private void SetPosition(Vector3 position)
         {
             transform.position = position;
         }
 
-        public void SetColor(Color color)
+        private void SetColor(Color color)
         {
             spriteRenderer.color = color;
         }
@@ -42,12 +43,12 @@ namespace ShootEmUp
         
         public void BulletInit(Args args)
         {
-            IsPlayer = args.isPlayer;
-            Damage = args.damage;
-            SetVelocity(args.velocity);
-            SetPhysicsLayer(args.physicsLayer);
-            SetPosition(args.position);
-            SetColor(args.color);
+            IsPlayer = args.IsPlayer;
+            Damage = args.Damage;
+            SetVelocity(args.Velocity);
+            SetPhysicsLayer(args.PhysicsLayer);
+            SetPosition(args.Position);
+            SetColor(args.Color);
         }
     }
 }

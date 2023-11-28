@@ -7,16 +7,17 @@ namespace ShootEmUp
     {
         public event Action<GameObject> HpIsEmpty;
         
-        [SerializeField] public int hitPoints;
+        public int HitPoints;
         
-        public bool IsHitPointsExists() {
-            return hitPoints > 0;
+        public bool IsHitPointsExists() 
+        {
+            return HitPoints > 0;
         }
 
         public void TakeDamage(int damage)
         {
-            hitPoints -= damage;
-            if (hitPoints <= 0)
+            HitPoints -= damage;
+            if (HitPoints <= 0)
             {
                 HpIsEmpty?.Invoke(gameObject);
             }

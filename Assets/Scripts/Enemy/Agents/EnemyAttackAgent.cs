@@ -4,23 +4,19 @@ namespace ShootEmUp
 {
     public sealed class EnemyAttackAgent : MonoBehaviour
     {
-        [SerializeField] private float countdown;
-        public delegate void FireHandler(GameObject enemy, Vector2 position, Vector2 direction);
-        private WeaponComponent weaponComponent;
-        private EnemyMoveAgent moveAgent;
+        [SerializeField] private float countdown = 1;
+
+        [SerializeField] private WeaponComponent weaponComponent;
+
+        [SerializeField] private EnemyMoveAgent moveAgent;
 
         private GameObject target;
+
         private float currentTime;
 
-        private void Awake()
+        public void SetTarget(GameObject player)
         {
-            weaponComponent = GetComponent<WeaponComponent>();
-            moveAgent = GetComponent<EnemyMoveAgent>();
-        }
-
-        public void SetTarget(GameObject target)
-        {
-            this.target = target;
+            target = player;
         }
 
         public void Reset()
@@ -34,33 +30,35 @@ namespace ShootEmUp
             {
                 return;
             }
-            
+
             if (!target.GetComponent<HitPointsComponent>().IsHitPointsExists())
             {
+                print("test1");
                 return;
             }
 
             currentTime -= Time.fixedDeltaTime;
             if (currentTime <= 0)
             {
-                OnAtack();
+                OnAttack();
                 currentTime += countdown;
             }
         }
 
-        private void OnAtack()
+        private void OnAttack()
         {
+            
             var startPosition = weaponComponent.Position;
             var vector = (Vector2) target.transform.position - startPosition;
             var direction = vector.normalized;
-            weaponComponent.OnWeaponAtack(new Args
+            weaponComponent.OnWeaponAttack(new Args
             {
-                isPlayer = false,
-                physicsLayer = (int) PhysicsLayer.ENEMY_BULLET,
-                color = Color.red,
-                damage = 1,
-                position = startPosition,
-                velocity = direction * 2.0f
+                IsPlayer = false,
+                PhysicsLayer = (int) PhysicsLayer.ENEMY_BULLET,
+                Color = Color.red,
+                Damage = 1,
+                Position = startPosition,
+                Velocity = direction * 2.0f
             });
         }
     }

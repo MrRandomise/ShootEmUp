@@ -1,31 +1,35 @@
 using UnityEngine;
+
 namespace ShootEmUp
 {
-public class FireCharacterControl : MonoBehaviour, IListenerEnable, IListenerDisabled
-{
-        [SerializeField] private CharacterController characterController;
+    public sealed class FireCharacterControl : MonoBehaviour, Listeners.IListenerStart, Listeners.IListenerStop
+    {
         [SerializeField] private BulletConfig bulletConfig;
 
-        public void OnListenerEnable()
+        [SerializeField] private InputFireControl fireControl;
+
+        [SerializeField] private WeaponComponent weaponComponent;
+
+        public void OnStart()
         {
-            characterController.inputControl.OnFireAction += OnAtack;
+            fireControl.OnFireAction += OnAttack;
         }
 
-        public void OnListenerDisabled()
+        public void OnStop()
         {
-            characterController.inputControl. OnFireAction -= OnAtack;
+            fireControl.OnFireAction -= OnAttack;
         }
         
-        private void OnAtack()
+        private void OnAttack()
         {
-            characterController.weaponComponent.OnWeaponAtack(new Args
+            weaponComponent.OnWeaponAttack(new Args
             {
-                isPlayer = true,
-                physicsLayer = (int) PhysicsLayer.PLAYER_BULLET,
-                color = Color.blue,
-                damage = 1,
-                position = characterController.weaponComponent.Position,
-                velocity = characterController.weaponComponent.Rotation * Vector3.up * bulletConfig.speed
+                IsPlayer = true,
+                PhysicsLayer = (int)bulletConfig.PhysicsLayer,
+                Color = bulletConfig.Color,
+                Damage = bulletConfig.Damage,
+                Position = weaponComponent.Position,
+                Velocity = weaponComponent.Rotation * Vector3.up * bulletConfig.Speed
             });
         }
     }

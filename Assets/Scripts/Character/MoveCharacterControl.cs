@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ShootEmUp
 {
-    public sealed class MoveCharacterControl : MonoBehaviour, Listeners.IListenerStart, Listeners.IListenerStop, Listeners.IListenerFixUpdate
+    public sealed class MoveCharacterControl : MonoBehaviour, IListenerEnabled, IListenerDisabled, IListenerFixUpdate
     {
         [SerializeField] private LevelBounds levelBounds;
 
@@ -13,12 +12,12 @@ namespace ShootEmUp
 
         private Vector2 direction;
 
-        public void OnStart()
+        public void ListnerEnabled()
         {
             moveControl.OnMoveAction += OnMove;
         }
 
-        public void OnStop()
+        public void ListnerDisabled()
         {
             moveControl.OnMoveAction -= OnMove;
         }
@@ -33,7 +32,7 @@ namespace ShootEmUp
                 direction =  new Vector2(0f, 0f);
         }
 
-        public void OnFixUpdate() 
+        public void OnFixUpdate(float deltaTime) 
         {
             moveComponent.MoveByRigidbodyVelocity(direction);
         }

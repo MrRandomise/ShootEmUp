@@ -4,11 +4,11 @@ using UnityEngine.EventSystems;
 
 namespace ShootEmUp
 {
-    public sealed class InputMoveControl : MonoBehaviour, Listeners.IListenerUpdate
+    public sealed class InputMoveControl : MonoBehaviour, IListenerUpdate
     {
         public event Action<int> OnMoveAction;
 
-        public void OnUpdate()
+        public void OnUpdate(float deltaTime)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyAttackAgent : MonoBehaviour, Listeners.IListenerFixUpdate
+    public sealed class EnemyAttackAgent : MonoBehaviour, IListenerFixUpdate
     {
         [SerializeField] private float countdown = 1;
 
@@ -26,7 +26,7 @@ namespace ShootEmUp
             currentTime = countdown;
         }
 
-        public void OnFixUpdate()
+        public void OnFixUpdate(float deltaTime)
         {
             if (!moveAgent.IsReached)
             {

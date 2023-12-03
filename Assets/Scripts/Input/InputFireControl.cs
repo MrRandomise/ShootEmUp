@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class InputFireControl : MonoBehaviour, Listeners.IListenerUpdate
+    public sealed class InputFireControl : MonoBehaviour, IListenerUpdate
     {
         public event Action OnFireAction;
 
-        public void OnUpdate()
+        public void OnUpdate(float deltaTime)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {

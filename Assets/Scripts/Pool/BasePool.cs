@@ -26,7 +26,7 @@ namespace ShootEmUp
             {
                 var target = Instantiate(GameObjectPrefab, Container);
                 OnPoll.Enqueue(target);
-            }
+            } 
         }
 
         public void RemoveObjectInPool(GameObject obj)

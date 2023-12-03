@@ -3,65 +3,68 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class ListenerInstaller : MonoBehaviour
+    public sealed class ListenerInstaller : MonoBehaviour
     {
-        private List<Listeners.IGameListener> listeners = new();
+        [SerializeField] private ListenerManager listenerManager;
 
-        public void AddListener(Listeners.IGameListener listener)
+        [SerializeField] private List<GameObject> listenersInScene = new List<GameObject>();
+
+        public  readonly List<IListenerUpdate> listenerUpdates = new List<IListenerUpdate>();
+
+        public  readonly List<IListenerFixUpdate> listenerFixUpdates = new List<IListenerFixUpdate>();
+
+        public List<IGameListener> Listeners = new List<IGameListener>();
+
+        private List<IGameListener> DynamicListeners = new List<IGameListener>();
+
+        private void Awake()
         {
-            listeners.Add(listener);
+            foreach (var gameListener in listenersInScene)
+            {
+                GetLisnters(gameListener);
+            }
+            InitStartGame(Listeners);
         }
 
-        private void Update()
+        private void InitStartGame(List<IGameListener> list)
         {
-            foreach (var gameListener in listeners)
+            listenerManager.OnGameStart(list);
+            listenerManager.OnGameResume(list);
+            listenerManager.OnGamePause(list);
+        }
+
+        public void AddDynamicLisnter(GameObject data)
+        {
+            foreach (var componentLisnter in data.GetComponentsInChildren<IGameListener>())
             {
-                if(gameListener is Listeners.IListenerUpdate Listener)
-                    Listener.OnUpdate();
+                GetTypeListener(componentLisnter);
+                DynamicListeners.Add(componentLisnter);
+            }
+            listenerManager.InitMonoBehaviorStart(DynamicListeners);
+            DynamicListeners.Clear();
+        }
+
+        private void GetLisnters(GameObject listner)
+        {
+            foreach (var componentLisnter in listner.GetComponentsInChildren<IGameListener>())
+            {
+                GetTypeListener(componentLisnter);
+                Listeners.Add(componentLisnter);
             }
         }
 
-        private void FixedUpdate()
+        private void GetTypeListener(IGameListener list)
         {
-            foreach (var gameListener in listeners)
+            switch(list)
             {
-                if (gameListener is Listeners.IListenerFixUpdate Listener)
-                    Listener.OnFixUpdate();
-            }
-        }
-
-        public void OnStart()
-        {
-            foreach (var gameListener in listeners)
-            {
-                if (gameListener is Listeners.IListenerStart Listener)
-                    Listener.OnStart();
-            }
-        }
-
-        public void OnStop()
-        {
-            foreach (var gameListener in listeners)
-            {
-                if (gameListener is Listeners.IListenerStop Listener)
-                    Listener.OnStop();
-            }
-        }
-        public void OnResume()
-        {
-            foreach (var gameListener in listeners)
-            {
-                if (gameListener is Listeners.IListenerResume Listener)
-                    Listener.OnResume();
-            }
-        }
-
-        public void OnPause()
-        {
-            foreach (var gameListener in listeners)
-            {
-                if (gameListener is Listeners.IListenerPause Listener)
-                    Listener.OnPause();
+                case IListenerUpdate listenerUpdate:
+                    listenerUpdates.Add(listenerUpdate);
+                    break;
+                case IListenerFixUpdate listenerFixUpdate:
+                    listenerFixUpdates.Add(listenerFixUpdate);
+                    break;
+                default:
+                    break;
             }
         }
     }

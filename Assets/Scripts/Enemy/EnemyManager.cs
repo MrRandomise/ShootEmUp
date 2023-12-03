@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyManager : BasePool, Listeners.IListenerStart
+    public sealed class EnemyManager : BasePool, IListenerStart, IListenerAwake
     {
 
         [SerializeField] private int spawnTime = 1;
@@ -13,10 +13,11 @@ namespace ShootEmUp
 
         [SerializeField] private GameObject character;
 
+        [SerializeField] private ListenerInstaller listenerInstaller;
+
         private readonly HashSet<GameObject> activeEnemies = new();
 
-
-        private void Awake()
+        public void OnAwake()
         {
             InitialObjectInPool();
         }
@@ -36,6 +37,7 @@ namespace ShootEmUp
                     if (activeEnemies.Add(enemy))
                     {
                         enemy.GetComponent<HitPointsComponent>().OnHpIsEmpty += OnDestroyed;
+                        listenerInstaller.AddDynamicLisnter(enemy);
                     }
                 }
             }

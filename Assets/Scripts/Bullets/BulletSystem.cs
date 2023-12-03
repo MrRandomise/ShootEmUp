@@ -1,15 +1,15 @@
 using UnityEngine;
-using static ShootEmUp.Listeners;
+using static UnityEngine.GraphicsBuffer;
 
 namespace ShootEmUp
 {
-    public sealed class BulletSystem : BasePool, IListenerFixUpdate
+    public sealed class BulletSystem : BasePool, IListenerFixUpdate, IListenerAwake
     {
         [SerializeField] private LevelBounds levelBounds;
 
         private BulletDamage bulletDamage = new BulletDamage();
 
-        private void Awake()
+        public void OnAwake()
         {
             InitialObjectInPool();
         }
@@ -40,7 +40,7 @@ namespace ShootEmUp
             }
         }
 
-        public void OnFixUpdate()
+        public void OnFixUpdate(float deltaTime)
         {
             Cache.Clear();
             Cache.AddRange(ActivePools);

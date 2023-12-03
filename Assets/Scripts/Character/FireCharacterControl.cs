@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class FireCharacterControl : MonoBehaviour, Listeners.IListenerStart, Listeners.IListenerStop
+    public sealed class FireCharacterControl : MonoBehaviour, IListenerEnabled, IListenerDisabled
     {
         [SerializeField] private BulletConfig bulletConfig;
 
@@ -10,12 +10,12 @@ namespace ShootEmUp
 
         [SerializeField] private WeaponComponent weaponComponent;
 
-        public void OnStart()
+        public void ListnerEnabled()
         {
             fireControl.OnFireAction += OnAttack;
         }
 
-        public void OnStop()
+        public void ListnerDisabled()
         {
             fireControl.OnFireAction -= OnAttack;
         }

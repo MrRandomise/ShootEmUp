@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class WeaponComponent : MonoBehaviour
+    public sealed class WeaponComponent : MonoBehaviour, IListenerAwake
     {
         [SerializeField] private Transform firePoint;
 
         private BulletSystem bulletSystem;
 
-        private void Awake()
+        public void OnAwake()
         {
             bulletSystem = FindObjectOfType<BulletSystem>();
         }

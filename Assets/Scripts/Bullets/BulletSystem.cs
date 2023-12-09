@@ -1,11 +1,12 @@
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace ShootEmUp
 {
     public sealed class BulletSystem : BasePool, IListenerFixUpdate, IListenerAwake
     {
         [SerializeField] private LevelBounds levelBounds;
+
+        [SerializeField] private ListenerInstaller listenerInstaller;
 
         private BulletDamage bulletDamage = new BulletDamage();
 
@@ -23,6 +24,7 @@ namespace ShootEmUp
             else
             {
                 bullet = Instantiate(GameObjectPrefab, WorldTransform);
+                listenerInstaller.AddDynamicLisnter(bullet);
             }
 
             return bullet.GetComponent<Bullet>();
@@ -33,7 +35,7 @@ namespace ShootEmUp
             var bullet = InstantiateBullet();
 
             bullet.BulletInit(args);
-            
+
             if (ActivePools.Add(bullet.gameObject))
             {
                 bullet.OnCollisionEntered += OnBulletCollision;

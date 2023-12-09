@@ -1,4 +1,7 @@
-public interface IListenerAwake : IGameListener
+namespace ShootEmUp
 {
-    void OnAwake();
+    public interface IListenerAwake : IGameListener
+    {
+        void OnAwake();
+    }
 }

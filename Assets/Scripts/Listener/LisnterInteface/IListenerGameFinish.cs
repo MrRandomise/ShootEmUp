@@ -1,4 +1,7 @@
-public interface IListenerGameFinish : IGameListener
+namespace ShootEmUp
 {
-    public void OnGameFinish();
+    public interface IListenerGameFinish : IGameListener
+    {
+        public void OnGameFinish();
+    }
 }

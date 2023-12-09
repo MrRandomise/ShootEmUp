@@ -12,12 +12,12 @@ namespace ShootEmUp
 
         private Vector2 direction;
 
-        public void ListnerEnabled()
+        public void ListenerEnabled()
         {
             moveControl.OnMoveAction += OnMove;
         }
 
-        public void ListnerDisabled()
+        public void ListenerDisabled()
         {
             moveControl.OnMoveAction -= OnMove;
         }

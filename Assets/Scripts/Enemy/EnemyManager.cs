@@ -32,7 +32,7 @@ namespace ShootEmUp
             while (true)
             {
                 yield return new WaitForSeconds(spawnTime);
-                if (SpawnEnemy(out var enemy))
+                if (TrySpawnyEnemy(out var enemy))
                 {
                     if (activeEnemies.Add(enemy))
                     {
@@ -43,7 +43,7 @@ namespace ShootEmUp
             }
         }
 
-        private bool SpawnEnemy(out GameObject enemy)
+        private bool TrySpawnyEnemy(out GameObject enemy)
         {
             if (!OnPoll.TryDequeue(out enemy))
             {

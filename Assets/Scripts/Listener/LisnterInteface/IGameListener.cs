@@ -1,4 +1,7 @@
-public interface IGameListener
+namespace ShootEmUp
 {
+    public interface IGameListener
+    {
 
+    }
 }

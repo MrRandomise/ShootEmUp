@@ -5,17 +5,29 @@ namespace ShootEmUp
 {
     public sealed class ListenerInstaller : MonoBehaviour
     {
+        public enum GameStatus
+        {
+            none,
+            Start,
+            Stop,
+            Pause,
+            Resume
+        }
+
         [SerializeField] private ListenerManager listenerManager;
 
         [SerializeField] private List<GameObject> listenersInScene = new List<GameObject>();
 
-        public  readonly List<IListenerUpdate> listenerUpdates = new List<IListenerUpdate>();
+        public readonly List<IListenerUpdate> ListenerUpdates = new List<IListenerUpdate>();
 
-        public  readonly List<IListenerFixUpdate> listenerFixUpdates = new List<IListenerFixUpdate>();
+        public readonly List<IListenerFixUpdate> ListenerFixUpdates = new List<IListenerFixUpdate>();
 
         public List<IGameListener> Listeners = new List<IGameListener>();
 
         private List<IGameListener> DynamicListeners = new List<IGameListener>();
+
+        public GameStatus Status;
+
 
         private void Awake()
         {
@@ -23,14 +35,21 @@ namespace ShootEmUp
             {
                 GetLisnters(gameListener);
             }
-            InitStartGame(Listeners);
+            listenerManager.OnGameStart(Listeners);
+            listenerManager.OnGameResume(Listeners);
+            listenerManager.OnGamePause(Listeners);
         }
 
-        private void InitStartGame(List<IGameListener> list)
+        public void InitMonoBehaviorStart(List<IGameListener> list)
         {
-            listenerManager.OnGameStart(list);
-            listenerManager.OnGameResume(list);
-            listenerManager.OnGamePause(list);
+            listenerManager.OnListenerEnabled(list);
+            listenerManager.OnAwake(list);
+            listenerManager.OnStart(list);
+        }
+
+        public void InitStopGame()
+        {
+            listenerManager.OnGameFinish(Listeners);
         }
 
         public void AddDynamicLisnter(GameObject data)
@@ -40,7 +59,7 @@ namespace ShootEmUp
                 GetTypeListener(componentLisnter);
                 DynamicListeners.Add(componentLisnter);
             }
-            listenerManager.InitMonoBehaviorStart(DynamicListeners);
+            InitMonoBehaviorStart(DynamicListeners);
             DynamicListeners.Clear();
         }
 
@@ -58,10 +77,10 @@ namespace ShootEmUp
             switch(list)
             {
                 case IListenerUpdate listenerUpdate:
-                    listenerUpdates.Add(listenerUpdate);
+                    ListenerUpdates.Add(listenerUpdate);
                     break;
                 case IListenerFixUpdate listenerFixUpdate:
-                    listenerFixUpdates.Add(listenerFixUpdate);
+                    ListenerFixUpdates.Add(listenerFixUpdate);
                     break;
                 default:
                     break;

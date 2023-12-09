@@ -1,4 +1,7 @@
-public interface IListenerGameStart : IGameListener
+namespace ShootEmUp
 {
-    void OnGameStart();
+    public interface IListenerGameStart : IGameListener
+    {
+        void OnGameStart();
+    }
 }

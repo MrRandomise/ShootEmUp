@@ -8,12 +8,12 @@ namespace ShootEmUp
 
         [SerializeField] private HitPointsComponent hitPointsComponent;
 
-        public void ListnerEnabled()
+        public void ListenerEnabled()
         {
             hitPointsComponent.OnHpIsEmpty += OnHpIsEmpty;
         }
 
-        public void ListnerDisabled()
+        public void ListenerDisabled()
         {
             hitPointsComponent.OnHpIsEmpty -= OnHpIsEmpty;
         }

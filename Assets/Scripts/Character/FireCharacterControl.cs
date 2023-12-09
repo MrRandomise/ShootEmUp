@@ -10,12 +10,12 @@ namespace ShootEmUp
 
         [SerializeField] private WeaponComponent weaponComponent;
 
-        public void ListnerEnabled()
+        public void ListenerEnabled()
         {
             fireControl.OnFireAction += OnAttack;
         }
 
-        public void ListnerDisabled()
+        public void ListenerDisabled()
         {
             fireControl.OnFireAction -= OnAttack;
         }

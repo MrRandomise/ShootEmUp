@@ -20,16 +20,16 @@ namespace ShootEmUp
         protected readonly List<GameObject> Cache = new();
 
 
-        public void InitialObjectInPool()
+        protected void InitialObjectInPool()
         {
             for (var i = 0; i < initialCount; i++)
             {
-                var target = Instantiate(GameObjectPrefab, Container);
-                OnPoll.Enqueue(target);
+                var ObjectInPool = Instantiate(GameObjectPrefab, Container);
+                OnPoll.Enqueue(ObjectInPool);
             } 
         }
 
-        public void RemoveObjectInPool(GameObject obj)
+        protected void RemoveObjectInPool(GameObject obj)
         {
             if (ActivePools.Remove(obj))
             {

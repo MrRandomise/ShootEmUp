@@ -1,24 +1,15 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace ShootEmUp
 {
     public sealed class ListenerManager : MonoBehaviour
     {
-        [SerializeField] private ListenerInstaller ListenerInstaller;
-        [SerializeField] private GameManager gameManager;
-
-        public void InitMonoBehaviorStart(List<IGameListener> list)
-        {
-            OnLisnterEnabled(list);
-            OnAwake(list);
-            OnStart(list);
-        }
+        [SerializeField] private ListenerInstaller listenerInstaller;
 
         private bool ResumeControl()
         {
-            if (gameManager.Status == GameManager.GameStatus.Start || gameManager.Status == GameManager.GameStatus.Resume)
+            if (listenerInstaller.Status == ListenerInstaller.GameStatus.Start || listenerInstaller.Status == ListenerInstaller.GameStatus.Resume)
             {
                 return true;
             }
@@ -29,7 +20,7 @@ namespace ShootEmUp
         {
             if(ResumeControl())
             {
-                OnUpdate(ListenerInstaller.listenerUpdates);
+                OnUpdate(listenerInstaller.ListenerUpdates);
             }
         }
 
@@ -37,13 +28,13 @@ namespace ShootEmUp
         {
             if (ResumeControl())
             {
-                OnFixUpdate(ListenerInstaller.listenerFixUpdates);
+                OnFixUpdate(listenerInstaller.ListenerFixUpdates);
             }
         }
 
         private void OnDisable()
         {
-            OnLisnterDisabled(ListenerInstaller.Listeners);
+            OnListenerDisabled(listenerInstaller.Listeners);
         }
 
         public void OnAwake(List<IGameListener> list)
@@ -88,24 +79,24 @@ namespace ShootEmUp
             }
         }
 
-        public void OnLisnterEnabled(List<IGameListener> list)
+        public void OnListenerEnabled(List<IGameListener> list)
         {
             foreach (var gameListener in list)
             {
                 if (gameListener is IListenerEnabled listener)
                 {
-                    listener.ListnerEnabled();
+                    listener.ListenerEnabled();
                 }
             }
         }
 
-        public void OnLisnterDisabled(List<IGameListener> list)
+        public void OnListenerDisabled(List<IGameListener> list)
         {
             foreach (var gameListener in list)
             {
                 if (gameListener is IListenerDisabled listener)
                 {
-                    listener.ListnerDisabled();
+                    listener.ListenerDisabled();
                 }
             }
         }

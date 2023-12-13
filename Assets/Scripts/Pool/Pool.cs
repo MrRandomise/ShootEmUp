@@ -17,7 +17,7 @@ namespace ShootEmUp
 
         protected readonly List<GameObject> Cache = new();
 
-        public ListenerManager ListenerManager;
+        protected ListenerManager ListenerManager;
 
         protected void InitialObjectInPool(GameObject GameObjectPrefab)
         {

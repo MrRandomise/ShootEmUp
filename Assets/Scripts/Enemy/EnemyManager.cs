@@ -1,47 +1,69 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject.SpaceFighter;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyManager : BasePool, IListenerStart, IListenerAwake
+    public sealed class EnemyManager : Pool, IListenerAwake, IListenerUpdate, IListenerStart
     {
+        private float initSpawnTime = 1;
 
-        [SerializeField] private int spawnTime = 1;
+        private float spawnTime = 1;
 
-        [SerializeField] private EnemyPositions enemyPositions;
+        private GameObject enemyPrefab;
 
-        [SerializeField] private GameObject character;
+        private EnemyPositions enemyPositions;
 
-        [SerializeField] private ListenerInstaller listenerInstaller;
+        private GameObject character;
 
         private readonly HashSet<GameObject> activeEnemies = new();
 
+        private ServiceEnemy serviceEnemy;
+
+        private BulletSystem bulletSystem;
+
+
+        public EnemyManager(ServiceEnemy service, ListenerManager manager, EnemyPositions position, BulletSystem bullet)
+        {
+            enemyPositions = position;
+            ListenerManager = manager;
+            serviceEnemy = service;
+            bulletSystem = bullet;
+            enemyPrefab = serviceEnemy.EnemyPrefab;
+            Container = serviceEnemy.EnemyContainer;
+            WorldTransform = serviceEnemy.WorldTransform;
+            Container = serviceEnemy.EnemyContainer;
+            character = serviceEnemy.Character;
+            ListenerManager.Listeners.Add(this);
+        }
+
         public void OnAwake()
         {
-            InitialObjectInPool();
+            initialCount = 7;
+            InitialObjectInPool(enemyPrefab);
         }
-
+        
         public void OnStart()
         {
-            StartCoroutine(StartSpawn());
+            initSpawnTime = spawnTime;
         }
 
-        private IEnumerator StartSpawn()
+        public void OnUpdate(float deltaTime)
         {
-            while (true)
+            spawnTime -= Time.deltaTime;
+            if (spawnTime <= 0)
             {
-                yield return new WaitForSeconds(spawnTime);
+                spawnTime = initSpawnTime;
                 if (TrySpawnyEnemy(out var enemy))
                 {
                     if (activeEnemies.Add(enemy))
                     {
                         enemy.GetComponent<HitPointsComponent>().OnHpIsEmpty += OnDestroyed;
-                        listenerInstaller.AddDynamicLisnter(enemy);
                     }
                 }
             }
         }
+
 
         private bool TrySpawnyEnemy(out GameObject enemy)
         {
@@ -56,9 +78,13 @@ namespace ShootEmUp
             enemy.transform.position = spawnPosition.position;
 
             var attackPosition = enemyPositions.RandomAttackPosition();
+
             enemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition.position);
 
+            enemy.GetComponent<WeaponComponent>().SetBulletSystem(bulletSystem);
+
             enemy.GetComponent<EnemyAttackAgent>().SetTarget(character);
+
             return true;
         }
 
@@ -73,6 +99,7 @@ namespace ShootEmUp
             if (activeEnemies.Remove(enemy))
             {
                 enemy.GetComponent<HitPointsComponent>().OnHpIsEmpty -= OnDestroyed;
+                enemy.GetComponent<EnemyAttackAgent>().RemoveTarget();
                 UnspawnEnemy(enemy);
             }
         }

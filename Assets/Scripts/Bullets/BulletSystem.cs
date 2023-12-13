@@ -2,17 +2,29 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class BulletSystem : BasePool, IListenerFixUpdate, IListenerAwake
+    public sealed class BulletSystem : Pool, IListenerFixUpdate, IListenerAwake
     {
-        [SerializeField] private LevelBounds levelBounds;
+        private LevelBounds levelBounds;
 
-        [SerializeField] private ListenerInstaller listenerInstaller;
+        private BulletDamage bulletDamage;
 
-        private BulletDamage bulletDamage = new BulletDamage();
+        private GameObject bulletPrefab;
+
+        public BulletSystem(LevelBounds bounds, ListenerManager manager, BulletDamage damage, ServiceBullet serviceBullet)
+        {
+            Container = serviceBullet.BulletContainer;
+            bulletPrefab = serviceBullet.BulletPrefab;
+            WorldTransform = serviceBullet.WorldTransform;
+            levelBounds = bounds;
+            ListenerManager = manager;
+            bulletDamage = damage;
+            ListenerManager.Listeners.Add(this);
+        }
 
         public void OnAwake()
         {
-            InitialObjectInPool();
+            initialCount = 50;
+            InitialObjectInPool(bulletPrefab);
         }
 
         public Bullet InstantiateBullet()
@@ -23,8 +35,7 @@ namespace ShootEmUp
             }
             else
             {
-                bullet = Instantiate(GameObjectPrefab, WorldTransform);
-                listenerInstaller.AddDynamicLisnter(bullet);
+                bullet = MonoBehaviour.Instantiate(bulletPrefab, WorldTransform);
             }
 
             return bullet.GetComponent<Bullet>();

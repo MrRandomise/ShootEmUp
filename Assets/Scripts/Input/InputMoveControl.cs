@@ -1,12 +1,16 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ShootEmUp
 {
-    public sealed class InputMoveControl : MonoBehaviour, IListenerUpdate
+    public sealed class InputMoveControl : IListenerUpdate
     {
         public event Action<int> OnMoveAction;
+
+        public InputMoveControl()
+        {
+            ListenerManager.Listeners.Add(this);
+        }
 
         public void OnUpdate(float deltaTime)
         {

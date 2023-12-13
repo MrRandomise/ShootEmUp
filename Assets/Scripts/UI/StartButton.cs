@@ -3,14 +3,21 @@ using UnityEngine.UI;
 
 namespace ShootEmUp
 {
-    public class StartButton : MonoBehaviour, IListenerGameStart, IListenerGameFinish
+    public sealed class StartButton : IListenerGameStart, IListenerGameFinish
     {
-        [SerializeField] private Button startButton;
-        [SerializeField] private Timer timer;
+        private Button startButton;
+        private Timer timer;
+
+        public StartButton(ServiceUi serviceUI, Timer startTimer)
+        {
+            startButton = serviceUI.StartButton;
+            timer = startTimer;
+            ListenerManager.Listeners.Add(this);
+        }
 
         public void OnButtonCLick()
         {
-            StartCoroutine(timer.OnTimer());
+            timer.StartTimer = true;
             startButton.gameObject.SetActive(false);
         }
 

@@ -2,37 +2,42 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class GameManager : MonoBehaviour
+    public sealed class GameManager
     {
-        [SerializeField] ListenerInstaller listenerInstaller;
+        private ListenerManager listenerManager;
+
+        public GameManager (ListenerManager manager)
+        {
+            listenerManager = manager;
+        }
 
         public void OnGameStart()
         {
-            listenerInstaller.Status = ListenerInstaller.GameStatus.Start;
-            listenerInstaller.InitMonoBehaviorStart(listenerInstaller.Listeners);
+            listenerManager.Status = ListenerManager.GameStatus.Start;
+            listenerManager.InitMonoBehaviorStart(ListenerManager.Listeners);
             Debug.Log("Game start!");
             Time.timeScale = 1;
         }
 
         public void OnGamePause()
         {
-            listenerInstaller.Status = ListenerInstaller.GameStatus.Pause;
+            listenerManager.Status = ListenerManager.GameStatus.Pause;
             Debug.Log("Game pause!");
             Time.timeScale = 0;
         }
 
         public void OnGameResume()
         {
-            listenerInstaller.Status = ListenerInstaller.GameStatus.Resume;
+            listenerManager.Status = ListenerManager.GameStatus.Resume;
             Debug.Log("Game resume!");
             Time.timeScale = 1;
         }
 
         public void OnGameStop()
         {
-            listenerInstaller.Status = ListenerInstaller.GameStatus.Stop;
+            listenerManager.Status = ListenerManager.GameStatus.Stop;
             Debug.Log("Game over!");
-            listenerInstaller.InitStopGame();
+            listenerManager.OnGameFinish();
             Time.timeScale = 0;
         }
     }

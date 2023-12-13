@@ -1,33 +1,43 @@
-using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Zenject;
 
 namespace ShootEmUp
 {
-    public class Timer : MonoBehaviour
+    public sealed class Timer : ITickable
     {
-        [SerializeField] private int timerInt = 3;
-        [SerializeField] private TMP_Text timerText;
-        [SerializeField] private Button pauseButton;
-        [SerializeField] private GameManager gameManager;
+        private float timerInt = 3;
+        private TMP_Text timerText;
+        private Button pauseButton;
+        private GameManager gameManager;
+        public bool StartTimer = false;
 
-        private int timeOneSecond = 1;
-
-        public IEnumerator OnTimer()
+        public Timer(ServiceUi serviceUi, GameManager manager)
         {
-            while (timerInt != 0)
-            {
-                SetTimer(timerInt);
-                timerInt--;
-                yield return new WaitForSeconds(timeOneSecond);
-            }
-            timerText.gameObject.SetActive(false);
-            pauseButton.gameObject.SetActive(true);
-            gameManager.OnGameStart();
+            timerInt = serviceUi.TimerInt;
+            timerText = serviceUi.TimerText;
+            pauseButton = serviceUi.PauseButton;
+            gameManager = manager;
         }
 
-        private void SetTimer(int time)
+        public void Tick()
+        {
+            if (timerInt > 1 && StartTimer)
+            {
+                timerInt -= Time.deltaTime;
+                SetTimer(Mathf.Round(timerInt));
+            }
+            else if (timerInt < 1 && StartTimer)
+            {
+                StartTimer = false;
+                timerText.gameObject.SetActive(false);
+                pauseButton.gameObject.SetActive(true);
+                gameManager.OnGameStart();
+            }
+        }
+
+        private void SetTimer(float time)
         {
             timerText.text = time.ToString();
         }

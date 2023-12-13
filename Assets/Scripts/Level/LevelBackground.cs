@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class LevelBackground : MonoBehaviour, IListenerFixUpdate, IListenerAwake
+    public sealed class LevelBackground : IListenerFixUpdate, IListenerAwake
     {
-        [SerializeField] private float startPositionY;
+        private float startPositionY;
 
-        [SerializeField] private float endPositionY;
+        private float endPositionY;
 
-        [SerializeField] private float movingSpeedY;
+        private float movingSpeedY;
 
         private float positionX;
 
@@ -16,9 +16,17 @@ namespace ShootEmUp
 
         private Transform myTransform;
 
+        public LevelBackground(ServiceBackGround serviceBackGround)
+        {
+            startPositionY = serviceBackGround.StartPositionY;
+            endPositionY = serviceBackGround.EndPositionY;
+            movingSpeedY = serviceBackGround.MovingSpeedY;
+            myTransform = serviceBackGround.BackGround;
+            ListenerManager.Listeners.Add(this);
+        }
+
         public void OnAwake()
         {
-            myTransform = transform;
             var position = myTransform.position;
             positionX = position.x;
             positionZ = position.z;

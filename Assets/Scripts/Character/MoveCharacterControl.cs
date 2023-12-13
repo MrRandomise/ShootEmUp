@@ -2,15 +2,26 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class MoveCharacterControl : MonoBehaviour, IListenerEnabled, IListenerDisabled, IListenerFixUpdate
+    public sealed class MoveCharacterControl : IListenerEnabled, IListenerDisabled, IListenerFixUpdate
     {
-        [SerializeField] private LevelBounds levelBounds;
+        private LevelBounds levelBounds;
 
-        [SerializeField] private InputMoveControl moveControl;
+        private InputMoveControl moveControl;
 
-        [SerializeField] private MoveComponent moveComponent;
+        private MoveComponent moveComponent;
+
+        private Transform transform;
 
         private Vector2 direction;
+
+        public MoveCharacterControl(LevelBounds bounds, InputMoveControl moveCont, ServiceCharacter serviceCharacter)
+        {
+            levelBounds = bounds;
+            moveControl = moveCont;
+            transform = serviceCharacter.Character.transform;
+            moveComponent = serviceCharacter.CharacterMoveComponent;
+            ListenerManager.Listeners.Add(this);
+        }
 
         public void ListenerEnabled()
         {
@@ -25,8 +36,8 @@ namespace ShootEmUp
         private void OnMove(int dir)
         {
             var vector = new Vector3(dir, 0, 0) * Time.fixedDeltaTime;
-            var postionCharacter = moveComponent.gameObject.transform.position;
-            if (levelBounds.InBounds(vector + postionCharacter))
+            var positionCharacter = transform.position;
+            if (levelBounds.InBounds(vector + positionCharacter))
                 direction = vector;
             else
                 direction =  new Vector2(0f, 0f);

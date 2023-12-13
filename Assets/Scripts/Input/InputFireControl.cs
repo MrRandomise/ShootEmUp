@@ -3,9 +3,14 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class InputFireControl : MonoBehaviour, IListenerUpdate
+    public sealed class InputFireControl : IListenerUpdate
     {
         public event Action OnFireAction;
+
+        public InputFireControl()
+        {
+            ListenerManager.Listeners.Add(this);
+        }
 
         public void OnUpdate(float deltaTime)
         {

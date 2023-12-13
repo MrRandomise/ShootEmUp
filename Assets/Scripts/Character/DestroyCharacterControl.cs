@@ -2,11 +2,18 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class DestroyCharacterControl : MonoBehaviour, IListenerEnabled, IListenerDisabled
+    public sealed class DestroyCharacterControl : IListenerEnabled, IListenerDisabled
     {
-        [SerializeField] private GameManager gameManager;
+        private GameManager gameManager;
 
-        [SerializeField] private HitPointsComponent hitPointsComponent;
+        private HitPointsComponent hitPointsComponent;
+
+        public DestroyCharacterControl(GameManager manager, ServiceCharacter serviceCharacter)
+        {
+            gameManager = manager;
+            hitPointsComponent = serviceCharacter.CharacterHitPointsComponent;
+            ListenerManager.Listeners.Add(this);
+        }
 
         public void ListenerEnabled()
         {

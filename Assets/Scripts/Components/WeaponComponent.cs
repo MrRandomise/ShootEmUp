@@ -1,16 +1,17 @@
 using UnityEngine;
+using Zenject;
 
 namespace ShootEmUp
 {
-    public sealed class WeaponComponent : MonoBehaviour, IListenerAwake
+    public sealed class WeaponComponent : MonoBehaviour
     {
         [SerializeField] private Transform firePoint;
 
         private BulletSystem bulletSystem;
 
-        public void OnAwake()
+        public void SetBulletSystem(BulletSystem system)
         {
-            bulletSystem = FindObjectOfType<BulletSystem>();
+            bulletSystem = system;
         }
 
         public Vector2 Position

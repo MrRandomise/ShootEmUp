@@ -4,21 +4,26 @@ namespace ShootEmUp
 {
     public sealed class EnemyAttackAgent : MonoBehaviour, IListenerFixUpdate
     {
-        [SerializeField] private float countdown = 1;
-
         [SerializeField] private WeaponComponent weaponComponent;
 
         [SerializeField] private EnemyMoveAgent moveAgent;
 
         [SerializeField] private BulletConfig bulletConfig;
 
-        private GameObject target;
+        [SerializeField] private float countdown = 1;
+
+        private GameObject target = null;
 
         private float currentTime;
 
         public void SetTarget(GameObject player)
         {
             target = player;
+        }
+
+        public void RemoveTarget()
+        {
+            target = null;
         }
 
         public void Reset()
@@ -28,6 +33,11 @@ namespace ShootEmUp
 
         public void OnFixUpdate(float deltaTime)
         {
+            if (target == null)
+            {
+                return;
+            }
+
             if (!moveAgent.IsReached)
             {
                 return;

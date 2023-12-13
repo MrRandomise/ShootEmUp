@@ -1,40 +1,98 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Zenject;
 
 namespace ShootEmUp
 {
-    public sealed class ListenerManager : MonoBehaviour
+    public sealed class ListenerManager : ITickable, IFixedTickable, IInitializable
     {
-        [SerializeField] private ListenerInstaller listenerInstaller;
+        public enum GameStatus
+        {
+            none,
+            Start,
+            Stop,
+            Pause,
+            Resume
+        }
+        public static List<IGameListener> Listeners = new List<IGameListener>();
+
+        private List<IListenerUpdate> ListenerUpdates = new List<IListenerUpdate>();
+
+        private List<IListenerFixUpdate> ListenerFixUpdates = new List<IListenerFixUpdate>();
+
+        private List<IGameListener> DynamicListeners = new List<IGameListener>();
+
+        public GameStatus Status;
+
+        public void Initialize() 
+        {
+            
+            foreach (var listener in Listeners)
+            {
+                GetTypeListener(listener);
+            }
+            OnGameStart();
+            OnGameResume();
+            OnGamePause();
+        }
+
+        public void InitMonoBehaviorStart(List<IGameListener> list)
+        {
+            OnListenerEnabled(list);
+            OnAwake(list);
+            OnStart(list);
+            OnEnumStart(list);
+        }
+
+        public void AddDynamicLisnter(GameObject data)
+        {
+            foreach (var componentLisnter in data.GetComponentsInChildren<IGameListener>())
+            {
+                GetTypeListener(componentLisnter);
+                DynamicListeners.Add(componentLisnter);
+            }
+            InitMonoBehaviorStart(DynamicListeners);
+            DynamicListeners.Clear();
+        }
+
+        private void GetTypeListener(IGameListener list)
+        {
+            switch (list)
+            {
+                case IListenerUpdate listenerUpdate:
+                    ListenerUpdates.Add(listenerUpdate);
+                    break;
+                case IListenerFixUpdate listenerFixUpdate:
+                    ListenerFixUpdates.Add(listenerFixUpdate);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         private bool ResumeControl()
         {
-            if (listenerInstaller.Status == ListenerInstaller.GameStatus.Start || listenerInstaller.Status == ListenerInstaller.GameStatus.Resume)
+            if (Status == GameStatus.Start || Status == GameStatus.Resume)
             {
                 return true;
             }
             return false;
         }
 
-        private void Update()
+        public void Tick()
         {
             if(ResumeControl())
             {
-                OnUpdate(listenerInstaller.ListenerUpdates);
+                OnUpdate(ListenerUpdates);
             }
         }
 
-        public void FixedUpdate()
+        public void FixedTick()
         {
             if (ResumeControl())
             {
-                OnFixUpdate(listenerInstaller.ListenerFixUpdates);
+                OnFixUpdate(ListenerFixUpdates);
             }
-        }
-
-        private void OnDisable()
-        {
-            OnListenerDisabled(listenerInstaller.Listeners);
         }
 
         public void OnAwake(List<IGameListener> list)
@@ -55,6 +113,17 @@ namespace ShootEmUp
                 if (gameListener is IListenerStart listener)
                 {
                     listener.OnStart();
+                }
+            }
+        }
+
+        public void OnEnumStart(List<IGameListener> list)
+        {
+            foreach (var gameListener in list)
+            {
+                if (gameListener is IListenerEnumStart listener)
+                {
+                    listener.OnEnumStart();
                 }
             }
         }
@@ -81,7 +150,7 @@ namespace ShootEmUp
 
         public void OnListenerEnabled(List<IGameListener> list)
         {
-            foreach (var gameListener in list)
+            foreach (var gameListener in Listeners)
             {
                 if (gameListener is IListenerEnabled listener)
                 {
@@ -92,7 +161,7 @@ namespace ShootEmUp
 
         public void OnListenerDisabled(List<IGameListener> list)
         {
-            foreach (var gameListener in list)
+            foreach (var gameListener in Listeners)
             {
                 if (gameListener is IListenerDisabled listener)
                 {
@@ -101,9 +170,9 @@ namespace ShootEmUp
             }
         }
 
-        public void OnGameStart(List<IGameListener> list)
+        public void OnGameStart()
         {
-            foreach (var gameListener in list)
+            foreach (var gameListener in Listeners)
             {
                 if (gameListener is IListenerGameStart listener)
                 {
@@ -112,9 +181,9 @@ namespace ShootEmUp
             }
         }
 
-        public void OnGameResume(List<IGameListener> list)
+        public void OnGameResume()
         {
-            foreach (var gameListener in list)
+            foreach (var gameListener in Listeners)
             {
                 if (gameListener is IListenerGameResume listener)
                 {
@@ -123,9 +192,9 @@ namespace ShootEmUp
             }
         }
 
-        public void OnGamePause(List<IGameListener> list)
+        public void OnGamePause()
         {
-            foreach (var gameListener in list)
+            foreach (var gameListener in Listeners)
             {
                 if (gameListener is IListenerGamePause listener)
                 {
@@ -134,9 +203,9 @@ namespace ShootEmUp
             }
         }
 
-        public void OnGameFinish(List<IGameListener> list)
+        public void OnGameFinish()
         {
-            foreach (var gameListener in list)
+            foreach (var gameListener in Listeners)
             {
                 if (gameListener is IListenerGameFinish listener)
                 {

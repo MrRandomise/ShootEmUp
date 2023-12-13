@@ -2,13 +2,22 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class FireCharacterControl : MonoBehaviour, IListenerEnabled, IListenerDisabled
+    public sealed class FireCharacterControl : IListenerEnabled, IListenerDisabled
     {
-        [SerializeField] private BulletConfig bulletConfig;
+        private BulletConfig bulletConfig;
 
-        [SerializeField] private InputFireControl fireControl;
+        private InputFireControl fireControl;
 
-        [SerializeField] private WeaponComponent weaponComponent;
+        private WeaponComponent weaponComponent;
+
+        public FireCharacterControl(BulletConfig Config, InputFireControl fire, ServiceCharacter serviceCharacter, BulletSystem bulletSystem)
+        {
+            bulletConfig = Config;
+            fireControl = fire;
+            weaponComponent = serviceCharacter.CharacterWeaponComponent;
+            weaponComponent.SetBulletSystem(bulletSystem);
+            ListenerManager.Listeners.Add(this);
+        }
 
         public void ListenerEnabled()
         {

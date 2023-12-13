@@ -6,9 +6,9 @@ namespace ShootEmUp
     public sealed class HitPointsComponent : MonoBehaviour
     {
         public event Action<GameObject> OnHpIsEmpty;
-        
+
         [SerializeField] private int hitPoints;
-        
+
         public bool IsHitPointsExists() 
         {
             return hitPoints > 0;

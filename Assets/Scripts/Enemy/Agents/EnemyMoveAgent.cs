@@ -15,7 +15,7 @@ namespace ShootEmUp
 
         private Vector2 destination;
 
-        private bool isReached;
+        private bool isReached = false;
 
         public void SetDestination(Vector2 endPoint)
         {
@@ -29,7 +29,7 @@ namespace ShootEmUp
             {
                 return;
             }
-            
+
             var vector = destination - (Vector2) transform.position;
             if (vector.magnitude <= magnitude)
             {

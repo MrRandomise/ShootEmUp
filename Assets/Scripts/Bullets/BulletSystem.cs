@@ -8,15 +8,13 @@ namespace ShootEmUp
 
         private BulletDamage bulletDamage;
 
-        private GameObject bulletPrefab;
+        private ServiceBullet serviceBullets;
 
-        public BulletSystem(LevelBounds bounds, ListenerManager manager, BulletDamage damage, ServiceBullet serviceBullet)
+        public BulletSystem(LevelBounds bounds, BulletDamage damage, ServiceBullet serviceBullet, Factory factory)
         {
-            Container = serviceBullet.BulletContainer;
-            bulletPrefab = serviceBullet.BulletPrefab;
-            WorldTransform = serviceBullet.WorldTransform;
+            serviceBullets = serviceBullet;
+            PoolFactory = factory;
             levelBounds = bounds;
-            ListenerManager = manager;
             bulletDamage = damage;
             ListenerManager.Listeners.Add(this);
         }
@@ -24,18 +22,18 @@ namespace ShootEmUp
         public void OnAwake()
         {
             initialCount = 50;
-            InitialObjectInPool(bulletPrefab);
+            InitialObjectInPool(serviceBullets.BulletPrefab, serviceBullets.BulletContainer);
         }
 
         public Bullet InstantiateBullet()
         {
             if (OnPoll.TryDequeue(out GameObject bullet))
             {
-                bullet.transform.SetParent(WorldTransform);
+                bullet.transform.SetParent(serviceBullets.WorldTransform);
             }
             else
             {
-                bullet = MonoBehaviour.Instantiate(bulletPrefab, WorldTransform);
+                bullet = PoolFactory.Creator(serviceBullets.BulletPrefab, serviceBullets.WorldTransform);
             }
 
             return bullet.GetComponent<Bullet>();
@@ -45,7 +43,7 @@ namespace ShootEmUp
         {
             var bullet = InstantiateBullet();
 
-            bullet.BulletInit(args);
+            bullet.BulletLogick.BulletInit(args);
 
             if (ActivePools.Add(bullet.gameObject))
             {
@@ -63,7 +61,7 @@ namespace ShootEmUp
                 var bullet = Cache[i];
                 if (!levelBounds.InBounds(bullet.transform.position))
                 {
-                    RemoveObjectInPool(bullet);
+                    RemoveObjectInPool(bullet, serviceBullets.BulletContainer);
                 }
             }
         }
@@ -72,7 +70,7 @@ namespace ShootEmUp
         {
             bullet.OnCollisionEntered -= OnBulletCollision;
             bulletDamage.DealDamage(bullet, collision.gameObject);
-            RemoveObjectInPool(bullet.gameObject);
+            RemoveObjectInPool(bullet.gameObject, serviceBullets.BulletContainer);
         }
     }
 }

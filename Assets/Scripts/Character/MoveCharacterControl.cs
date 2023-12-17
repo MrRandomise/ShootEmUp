@@ -45,7 +45,7 @@ namespace ShootEmUp
 
         public void OnFixUpdate(float deltaTime) 
         {
-            moveComponent.MoveByRigidbodyVelocity(direction);
+            moveComponent.MoveLogick.MoveByRigidbodyVelocity(direction);
         }
     }
 }

@@ -1,31 +1,18 @@
 using UnityEngine;
+using Zenject;
 
 namespace ShootEmUp
 {
     public sealed class WeaponComponent : MonoBehaviour
     {
-        [SerializeField] private Transform firePoint;
+        public Transform FirePoint;
 
-        private BulletSystem bulletSystem;
+        public WeaponLogick WeaponLogick;
 
-        public void SetBulletSystem(BulletSystem system)
+        [Inject]
+        private void Construcrt(BulletSystem bulletSystem)
         {
-            bulletSystem = system;
-        }
-
-        public Vector2 Position
-        {
-            get { return firePoint.position; }
-        }
-
-        public Quaternion Rotation
-        {
-            get { return firePoint.rotation; }
-        }
-
-        public void OnWeaponAttack(Args bulletArgs)
-        {
-            bulletSystem.FlyBulletByArgs(bulletArgs);
+            WeaponLogick = new WeaponLogick(this, bulletSystem);
         }
     }
 }

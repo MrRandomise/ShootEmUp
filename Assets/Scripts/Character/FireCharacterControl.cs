@@ -10,12 +10,14 @@ namespace ShootEmUp
 
         private WeaponComponent weaponComponent;
 
-        public FireCharacterControl(BulletConfig Config, InputFireControl fire, ServiceCharacter serviceCharacter, BulletSystem bulletSystem)
+        private BulletSystem bulletSystem;
+
+        public FireCharacterControl(BulletConfig Config, InputFireControl fire, ServiceCharacter serviceCharacter, BulletSystem bullet)
         {
             bulletConfig = Config;
             fireControl = fire;
             weaponComponent = serviceCharacter.CharacterWeaponComponent;
-            weaponComponent.SetBulletSystem(bulletSystem);
+            bulletSystem = bullet;
             ListenerManager.Listeners.Add(this);
         }
 
@@ -31,14 +33,14 @@ namespace ShootEmUp
         
         private void OnAttack()
         {
-            weaponComponent.OnWeaponAttack(new Args
+            weaponComponent.WeaponLogick.OnWeaponAttack(new Args
             {
                 IsPlayer = true,
                 PhysicsLayer = (int)bulletConfig.PhysicsLayer,
                 Color = bulletConfig.Color,
                 Damage = bulletConfig.Damage,
-                Position = weaponComponent.Position,
-                Velocity = weaponComponent.Rotation * Vector3.up * bulletConfig.Speed
+                Position = weaponComponent.WeaponLogick.Position,
+                Velocity = weaponComponent.WeaponLogick.Rotation * Vector3.up * bulletConfig.Speed
             });
         }
     }

@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 3898814119802471033}
   - component: {fileID: 8227974633065867484}
   - component: {fileID: 5119030825705520891}
-  - component: {fileID: 1754316020833009046}
-  - component: {fileID: 3866084958760801424}
+  - component: {fileID: 5243419266824918817}
+  - component: {fileID: 4966925597338501841}
   m_Layer: 11
   m_Name: Enemy
   m_TagString: Untagged
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae5daa1be9cc40a78a2f07cd53e5b47e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPoints: 3
+  HitPoints: 0
 --- !u!114 &3898814119802471033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce164c84a74a425f8d2e82764aef9e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firePoint: {fileID: 3195880656587174614}
+  FirePoint: {fileID: 3195880656587174614}
 --- !u!114 &5119030825705520891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <IsPlayer>k__BackingField: 0
---- !u!114 &1754316020833009046
+--- !u!114 &5243419266824918817
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -195,11 +195,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba7965842e74a9f89ba3aa66d61da46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponComponent: {fileID: 8227974633065867484}
-  moveAgent: {fileID: 3866084958760801424}
-  bulletConfig: {fileID: 11400000, guid: 5fec4fb91cdb9a646a22c4781c368db5, type: 2}
-  countdown: 1
---- !u!114 &3866084958760801424
+  WeaponComponent: {fileID: 8227974633065867484}
+  MoveAgent: {fileID: 4966925597338501841}
+  BulletConfig: {fileID: 11400000, guid: 5fec4fb91cdb9a646a22c4781c368db5, type: 2}
+  Countdown: 1
+  CurrentTime: 0
+--- !u!114 &4966925597338501841
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,8 +212,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bdb5771141e4cf18c434a69ec116e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  magnitude: 0.25
-  moveComponent: {fileID: 3898814119802471033}
+  IsReached: 0
+  Magnitude: 0.25
+  MoveComponent: {fileID: 3898814119802471033}
+  Destination: {x: 0, y: 0}
 --- !u!1001 &8428642055870456661
 PrefabInstance:
   m_ObjectHideFlags: 0

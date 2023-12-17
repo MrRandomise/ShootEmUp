@@ -5,22 +5,16 @@ namespace ShootEmUp
 {
     public sealed class HitPointsComponent : MonoBehaviour
     {
+        public int HitPoints = 3;
+
         public event Action<GameObject> OnHpIsEmpty;
 
-        [SerializeField] private int hitPoints;
+        public HitPointsLogick HitPointLogick => new HitPointsLogick(this);
 
-        public bool IsHitPointsExists() 
+        public void BulletDamage()
         {
-            return hitPoints > 0;
+            OnHpIsEmpty?.Invoke(gameObject);
         }
-
-        public void TakeDamage(int damage)
-        {
-            hitPoints -= damage;
-            if (hitPoints <= 0)
-            {
-                OnHpIsEmpty?.Invoke(gameObject);
-            }
-        }
+        
     }
 }

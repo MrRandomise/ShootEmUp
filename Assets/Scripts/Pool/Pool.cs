@@ -7,34 +7,29 @@ namespace ShootEmUp
     {
         protected int initialCount = 7;
 
-        protected Transform Container;
-
-        protected Transform WorldTransform;
-
         protected readonly HashSet<GameObject> ActivePools = new();
 
         protected readonly Queue<GameObject> OnPoll = new();
 
         protected readonly List<GameObject> Cache = new();
 
-        protected ListenerManager ListenerManager;
+        protected Factory PoolFactory;
 
-        protected void InitialObjectInPool(GameObject GameObjectPrefab)
+        protected void InitialObjectInPool(GameObject gameObjectPrefab, Transform container)
         {
             for (var i = 0; i < initialCount; i++)
             {
-                var ObjectInPool = MonoBehaviour.Instantiate(GameObjectPrefab, Container);
-                ListenerManager.AddDynamicLisnter(ObjectInPool);
-                OnPoll.Enqueue(ObjectInPool);
+                var objectInPool = PoolFactory.Creator(gameObjectPrefab, container);
+                OnPoll.Enqueue(objectInPool);
             } 
         }
 
 
-        protected void RemoveObjectInPool(GameObject obj)
+        protected void RemoveObjectInPool(GameObject obj, Transform container)
         {
             if (ActivePools.Remove(obj))
             {
-                obj.transform.SetParent(Container);
+                obj.transform.SetParent(container);
                 OnPoll.Enqueue(obj);
             }
         }

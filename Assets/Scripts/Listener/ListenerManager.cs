@@ -44,13 +44,10 @@ namespace ShootEmUp
             OnEnumStart(list);
         }
 
-        public void AddDynamicLisnter(GameObject data)
+        public void AddDynamicLisnter(IGameListener data)
         {
-            foreach (var componentLisnter in data.GetComponentsInChildren<IGameListener>())
-            {
-                GetTypeListener(componentLisnter);
-                DynamicListeners.Add(componentLisnter);
-            }
+            GetTypeListener(data);
+            DynamicListeners.Add(data);
             InitMonoBehaviorStart(DynamicListeners);
             DynamicListeners.Clear();
         }

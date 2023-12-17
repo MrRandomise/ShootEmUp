@@ -9,37 +9,25 @@ namespace ShootEmUp
 
         private float spawnTime = 1;
 
-        private GameObject enemyPrefab;
-
         private EnemyPositions enemyPositions;
-
-        private GameObject character;
 
         private readonly HashSet<GameObject> activeEnemies = new();
 
         private ServiceEnemy serviceEnemy;
 
-        private BulletSystem bulletSystem;
 
-
-        public EnemyManager(ServiceEnemy service, ListenerManager manager, EnemyPositions position, BulletSystem bullet)
+        public EnemyManager(ServiceEnemy service, EnemyPositions position, Factory factory)
         {
+            PoolFactory = factory;
             enemyPositions = position;
-            ListenerManager = manager;
             serviceEnemy = service;
-            bulletSystem = bullet;
-            enemyPrefab = serviceEnemy.EnemyPrefab;
-            Container = serviceEnemy.EnemyContainer;
-            WorldTransform = serviceEnemy.WorldTransform;
-            Container = serviceEnemy.EnemyContainer;
-            character = serviceEnemy.Character;
             ListenerManager.Listeners.Add(this);
         }
 
         public void OnAwake()
         {
             initialCount = 7;
-            InitialObjectInPool(enemyPrefab);
+            InitialObjectInPool(serviceEnemy.EnemyPrefab, serviceEnemy.EnemyContainer);
         }
         
         public void OnStart()
@@ -71,25 +59,23 @@ namespace ShootEmUp
                 return false;
             }
 
-            enemy.transform.SetParent(WorldTransform);
+            enemy.transform.SetParent(serviceEnemy.WorldTransform);
 
             var spawnPosition = enemyPositions.RandomSpawnPosition();
             enemy.transform.position = spawnPosition.position;
 
             var attackPosition = enemyPositions.RandomAttackPosition();
 
-            enemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition.position);
+            enemy.GetComponent<EnemyMoveAgentComponent>().EnemyMove.SetDestination(attackPosition.position);
 
-            enemy.GetComponent<WeaponComponent>().SetBulletSystem(bulletSystem);
-
-            enemy.GetComponent<EnemyAttackAgent>().SetTarget(character);
+            enemy.GetComponent<EnemyAttackAgentComponent>().EnemyAttack.SetTarget(serviceEnemy.Character);
 
             return true;
         }
 
         public void UnspawnEnemy(GameObject enemy)
         {
-            enemy.transform.SetParent(Container);
+            enemy.transform.SetParent(serviceEnemy.EnemyContainer);
             OnPoll.Enqueue(enemy);
         }
 
@@ -98,7 +84,7 @@ namespace ShootEmUp
             if (activeEnemies.Remove(enemy))
             {
                 enemy.GetComponent<HitPointsComponent>().OnHpIsEmpty -= OnDestroyed;
-                enemy.GetComponent<EnemyAttackAgent>().RemoveTarget();
+                enemy.GetComponent<EnemyAttackAgentComponent>().EnemyAttack.RemoveTarget();
                 UnspawnEnemy(enemy);
             }
         }
